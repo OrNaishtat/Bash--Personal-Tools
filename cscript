@@ -1,0 +1,43 @@
+#! /bin/bash
+################################################################################
+## Quick bash script generation.
+## Automatic mode - $1 script name, $2 for path.
+## If $1 is empty - will ask for script name.
+## If $2 is empty - will use 'pwd'
+################################################################################
+
+THENAME=$1
+THEPATH=$2
+
+determinevars(){
+    if [ -z $THEPATH ]; then
+    THEPATH=$(pwd)
+    fi
+    if [ -z $THENAME ]; then
+    read -p "Please input script name: " SCRIPT_NAME
+    THENAME=$SCRIPT_NAME
+    fi
+    TOGETHER="${THEPATH}/${THENAME}"
+}
+
+createthescript(){
+
+    touch $TOGETHER
+    chmod +x $TOGETHER
+    echo "#! /bin/bash" > $TOGETHER
+}
+
+test_exists(){
+    if [ -e "$TOGETHER" -a -f "$TOGETHER" ]; then
+    echo "File already exists in path."
+    exit
+    elif [ -e "$TOGETHER" -a -d "$TOGETHER" ]; then
+    echo "Directory type already exists in path."
+    exit
+    fi
+}
+
+
+determinevars
+test_exists
+createthescript
